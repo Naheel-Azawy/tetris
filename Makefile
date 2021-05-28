@@ -7,7 +7,11 @@ SRC_TUI  = tetris_tui.c
 SRC_INO  = tetris_arduino.ino
 SRC_WASM = tetris_wasm.c
 
-all: build/tetris build/tetris-all.c build/tetris.ino index.html
+all:     tui tui-all ino web
+tui:     build/tetris
+tui-all: build/tetris-all.c
+ino:     build/tetris.ino
+web:     index.html
 
 build/tetris: $(SRC) $(HDR) $(SRC_TUI)
 	mkdir -p build

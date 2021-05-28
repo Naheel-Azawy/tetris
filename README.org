@@ -1,0 +1,28 @@
+* Tetris
+  Yet another tetris implementation.
+
+** Why?
+   I play tetris since childhood. Such a shame it took me all that long to write my own. I also wanted to see how would I implement it. I haven't gone over any other implementation before so this probably won't be the most optimum tetris out there. The plan was to compare this to other implementations once it's done but I got lazy. Feel free to review and/or to send pull requests.
+
+** Scoring/speed
+   Rules are taken from emacs's ~tetris.el~. Which I guess is originally adopted from xtetris.
+
+** In the box
+   - Terminal version (~make tui && sudo make install~)
+   - Arduino version with MD_MAX72xx (~make ino~ to generate ~./build/tetris.ino~)
+   - Web version (~make web~ to generate ~index.html~)
+
+** Terminal version
+   ANSI support is enabled by default. For ASCII, pass -a option. For mouse support, pass -m option.
+
+** Arduino version
+   Once you get your ~./build/tetris.ino~, you can use this in Arduino IDE, ~arduino-cli~, or ~pio~.
+   Note that the game is controlled using only two buttons. This is mainly because I found only two in the drawer next to my desk.
+   Each button has two functions. One is used to rotate the shape and to move down on long press.
+   The other button moves the shape left or right. On long press, the direction of the movement is flipped.
+
+** Web version
+   Web Assembly supported browser is needed for the game logic. The UI is written in pure html, css, and js (es6).
+
+** License
+   GPL-3
