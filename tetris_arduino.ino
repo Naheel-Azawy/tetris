@@ -48,10 +48,22 @@ void rand_seed() {
 
 void draw(game *g) {
   int mx_cols = mx.getColumnCount();
-  int col_count = 0;
+  int col_count;
+
+  // next board
+  u16 *next = g->next + 1;
+  col_count = 0;
+  for (int j = 0; j < T; ++j) {
+    check_btns();
+    mx.setColumn(mx_cols - 2 - col_count++ - 1, next[j] << 3);
+  }
+  mx.setColumn(mx_cols - 8, 0xff);
+
+  // game board
+  col_count = 0;
   for (int j = T; j < g->h + T; ++j) {
     check_btns();
-    mx.setColumn(mx_cols - col_count++ - 1, g->boardtmp[j]);
+    mx.setColumn(mx_cols - 8 - col_count++ - 1, g->boardtmp[j]);
   }
 }
 
@@ -70,7 +82,7 @@ void on_btn_a() {
 }
 
 void on_btn_a_2() {
-  tetris.msg = BOTTOM;
+  tetris.msg = DOWN;
 }
 
 void on_btn_b() {
@@ -102,8 +114,7 @@ void setup() {
 
   dir = LEFT;
   tetris.w = 8;
-  tetris.h = 16;
-  //tetris.h = mx.getColumnCount();
+  tetris.h = 24;
 
   game_init(&tetris);
 }
