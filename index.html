@@ -4,6 +4,7 @@
         <title>Tetris</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+
         <style>
          body, button, select, input, a {
              color:       white;
@@ -16,14 +17,14 @@
 
          button {
              width: 100%;
-             width:  7ex;
-             height: 7ex;
+             width:  50px;
+             height: 50px;
          }
 
          #board td, #board-next td {
              /*border: 1px solid white;*/
-             width:  4vmin;
-             height: 4vmin;
+             width:  25px;
+             height: 25px;
          }
 
          #board, #board-next {
@@ -35,6 +36,11 @@
 
          #board-next {
              border-top: 2px solid white;
+         }
+
+         #game-over {
+             width: 100%;
+             text-align: center;
          }
         </style>
     </head>
@@ -51,9 +57,10 @@
                     <table id="board-next"></table>
                     <br>
                     <table>
-                        <tr> <td>Shapes:</td> <td id="shapes"></td> </tr>
-                        <tr> <td>Rows:</td>   <td id="rows"></td>   </tr>
-                        <tr> <td>Score:</td>  <td id="score"></td>  </tr>
+                        <tr><td>Shapes:</td> <td id="shapes"></td></tr>
+                        <tr><td>Rows:  </td> <td id="rows">  </td></tr>
+                        <tr><td>Score: </td> <td id="score"> </td></tr>
+                        <tr><td><a href="https://github.com/Naheel-Azawy/tetris">Source</a></td></tr>
                     </table>
                 </td>
             </tr></table>
@@ -61,17 +68,242 @@
             <br>
             <table style="width: 80%; margin: auto">
                 <tr>
-                    <td><button onclick="data[msg] = LEFT"   >&lt</button></td>
-                    <td><button onclick="data[msg] = DOWN"   >D</button></td>
-                    <td><button onclick="data[msg] = BOTTOM" >B</button></td>
+                    <td><button onclick="data[msg] = LEFT">&lt</button></td>
+                    <td></td>
+                    <td><button onclick="data[msg] = BOTTOM">B</button></td>
+                    <td></td>
+                    <td><button onclick="data[msg] = RIGHT">&gt</button></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><button onclick="data[msg] = DOWN">D</button></td>
+                    <td></td>
                     <td><button onclick="data[msg] = ROTATE1">R</button></td>
-                    <td><button onclick="data[msg] = RIGHT"  >&gt</button></td>
+                    <td></td>
                 </tr>
             </table>
         </div>
 
-        <div id="game-over"></div>
+        <h2 id="game-over"></h2>
 
-        <script src="tetris_wasm_ui.js"></script>
+        <script>
+const tetris_asm = atob(`
+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
+AAAABQAAAAYAAAAFAAAABQAAAAgAAAAFAAAACA==
+`);
+
+// tetris_asm is auto generated
+const tetris_codearray = new Uint8Array(tetris_asm.length);
+for (let i in tetris_asm) tetris_codearray[i] = tetris_asm.charCodeAt(i);
+
+// check tetris.h
+const NONE    = 0;
+const QUIT    = 1;
+const REDRAW  = 2;
+const PAUSE   = 3;
+const BOTTOM  = 4;
+const DOWN    = 5;
+const RIGHT   = 6;
+const LEFT    = 7;
+const ROTATE1 = 8;
+const ROTATE2 = 9;
+
+const W       = 10;
+const H       = 20;
+const T       = 4;
+const DELAY   = 10;
+
+let w;
+let h;
+let data;
+let data_len;
+let score, rows, shapes, gameover, drawf, msg, now;
+
+async function delay(time) {
+    return new Promise((resolve) => setTimeout(resolve, time));
+}
+
+async function run_game() {
+    const wasm = await WebAssembly.instantiate(tetris_codearray);
+    let { memory, setup, loop, get_data_len } = wasm.instance.exports;
+
+    w = W;
+    h = H;
+    data_len = get_data_len(w, h);
+    data = new Int32Array(memory.buffer, 0, data_len);
+
+    score    = data_len - 7;
+    shapes   = data_len - 6;
+    rows     = data_len - 5;
+    gameover = data_len - 4;
+    drawf    = data_len - 3;
+    msg      = data_len - 2;
+    now      = data_len - 1;
+
+    let _setup = setup;
+    let _loop = loop;
+    setup = () => { data[now] = Date.now(); _setup(w, h, data); };
+    loop  = () => { data[now] = Date.now(); _loop(); };
+
+    data[msg] = NONE;
+    setup();
+
+    for (;;) {
+        loop();
+        if (data[msg] != NONE) {
+            data[msg] = NONE;
+        }
+
+        if (data[drawf]) { // draw flag
+
+            for (let j = 0; j < h; ++j) {
+                for (let i = 0; i < w; ++i) {
+                    set_cell(i, j, data[w * j + i]);
+                }
+            }
+
+            // TODO: why j=0 is messed up?
+            for (let j = 1; j < T; ++j) {
+                for (let i = 0; i < T; ++i) {
+                    set_cell(i, j, data[(w * h) + T * j + i], true);
+                }
+            }
+
+            document.getElementById("score").innerText  = data[score];
+            document.getElementById("rows").innerText   = data[rows];
+            document.getElementById("shapes").innerText = data[shapes];
+
+            if (data[gameover]) {
+                let c = document.getElementById("content");
+                let o = document.getElementById("game-over");
+                c.style.visibility = "collapse";
+                o.innerHTML = "<br>GAME OVER!<br><br>" +
+                    "Shapes: " + data[shapes] + "<br>" +
+                    "Rows: "   + data[rows]   + "<br>" +
+                    "Score: "  + data[score]  + "<br>";
+                await delay(3000);
+                o.innerHTML = "";
+                c.style.visibility = "visible";
+                break;
+            } else {
+                await delay(DELAY);
+            }
+
+            data[drawf] = 0;
+        } else {
+            await delay(DELAY);
+        }
+    }
+}
+
+function set_cell(i, j, val, next) {
+    next = next ? "-next" : "";
+    document.getElementById(`cell${next}-${i},${j}`).style.background =
+        val == 0 ? "black" : "white";
+}
+
+async function main() {
+    window.onbeforeunload = () => "Are you sure you want to leave?";
+
+    document.addEventListener("keydown", event => {
+        switch (event.key) {
+        case "ArrowRight": data[msg] = RIGHT;   break;
+        case "ArrowLeft":  data[msg] = LEFT;    break;
+        case "ArrowUp":    data[msg] = ROTATE1; break;
+        case "ArrowDown":  data[msg] = DOWN;    break;
+        case " ":          data[msg] = BOTTOM;  break;
+        case "p":          data[msg] = PAUSE;   break;
+        }
+    });
+
+    let table, tr, td;
+
+    table = document.getElementById("board");
+    for (let j = 0; j < H; ++j) {
+        tr = document.createElement("tr");
+        table.appendChild(tr);
+        for (let i = 0; i < W; ++i) {
+            td = document.createElement("td");
+            td.id = `cell-${i},${j}`;
+            tr.appendChild(td);
+        }
+    }
+
+    table = document.getElementById("board-next");
+    for (let j = 0; j < T; ++j) {
+        tr = document.createElement("tr");
+        table.appendChild(tr);
+        for (let i = 0; i < T; ++i) {
+            td = document.createElement("td");
+            td.id = `cell-next-${i},${j}`;
+            tr.appendChild(td);
+        }
+    }
+
+    for (;;) await run_game();
+}
+
+main();
+        </script>
     </body>
 </html>

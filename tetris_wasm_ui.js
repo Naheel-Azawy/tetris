@@ -1,4 +1,8 @@
 
+// tetris_asm is auto generated
+const tetris_codearray = new Uint8Array(tetris_asm.length);
+for (let i in tetris_asm) tetris_codearray[i] = tetris_asm.charCodeAt(i);
+
 // check tetris.h
 const NONE    = 0;
 const QUIT    = 1;
@@ -27,9 +31,7 @@ async function delay(time) {
 }
 
 async function run_game() {
-    const response = await fetch("tetris_wasm.wasm");
-    const file = await response.arrayBuffer();
-    const wasm = await WebAssembly.instantiate(file);
+    const wasm = await WebAssembly.instantiate(tetris_codearray);
     let { memory, setup, loop, get_data_len } = wasm.instance.exports;
 
     w = W;
@@ -82,10 +84,10 @@ async function run_game() {
                 let c = document.getElementById("content");
                 let o = document.getElementById("game-over");
                 c.style.visibility = "collapse";
-                o.innerHTML = "GAME OVER!<br>";
-                o.innerHTML += "Shapes: " + data[shapes] + "<br>";
-                o.innerHTML += "Rows: "   + data[rows]   + "<br>";
-                o.innerHTML += "Score: "  + data[score]  + "<br>";
+                o.innerHTML = "<br>GAME OVER!<br><br>" +
+                    "Shapes: " + data[shapes] + "<br>" +
+                    "Rows: "   + data[rows]   + "<br>" +
+                    "Score: "  + data[score]  + "<br>";
                 await delay(3000);
                 o.innerHTML = "";
                 c.style.visibility = "visible";
@@ -108,6 +110,8 @@ function set_cell(i, j, val, next) {
 }
 
 async function main() {
+    window.onbeforeunload = () => "Are you sure you want to leave?";
+
     document.addEventListener("keydown", event => {
         switch (event.key) {
         case "ArrowRight": data[msg] = RIGHT;   break;

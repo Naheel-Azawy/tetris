@@ -1,13 +1,13 @@
 PREFIX = /usr/bin/
 CC = gcc
 
-SRC = tetris.c
-HDR = tetris.h
-SRC_TUI = tetris_tui.c
-SRC_INO = tetris_arduino.ino
+SRC      = tetris.c
+HDR      = tetris.h
+SRC_TUI  = tetris_tui.c
+SRC_INO  = tetris_arduino.ino
 SRC_WASM = tetris_wasm.c
 
-all: build/tetris build/tetris-all.c build/tetris.ino tetris_wasm.wasm
+all: build/tetris build/tetris-all.c build/tetris.ino index.html
 
 build/tetris: $(SRC) $(HDR) $(SRC_TUI)
 	mkdir -p build
@@ -18,11 +18,18 @@ build/tetris-all.c: $(SRC) $(HDR) $(SRC_TUI)
 	cat $(HDR) $(SRC) $(SRC_TUI) > ./build/tetris-all.c
 	sed -i 's/#include "tetris.h"//' ./build/tetris-all.c
 
-tetris_wasm.wasm: $(SRC) $(HDR) $(SRC_WASM)
+./build/tetris_wasm.wasm: $(SRC) $(HDR) $(SRC_WASM)
 	mkdir -p build
-	cat $(HDR) $(SRC) $(SRC_WASM) > ./build/tetris-all-wasm.c
-	sed -i 's/#include "tetris.h"//' ./build/tetris-all-wasm.c
-	emcc -Os -s STANDALONE_WASM -s EXPORTED_FUNCTIONS="['_setup', '_loop', '_get_data_len']" -Wl,--no-entry ./build/tetris-all-wasm.c -o ./tetris_wasm.wasm
+	cat $(HDR) $(SRC) $(SRC_WASM) > ./build/tetris_wasm_all.c
+	sed -i 's/#include "tetris.h"//' ./build/tetris_wasm_all.c
+	emcc -Os -s STANDALONE_WASM -s EXPORTED_FUNCTIONS="['_setup', '_loop', '_get_data_len']" -Wl,--no-entry ./build/tetris_wasm_all.c -o ./build/tetris_wasm.wasm
+
+index.html: ./build/tetris_wasm.wasm tetris_wasm_ui.js tetris_wasm_ui.html
+	echo 'const tetris_asm = atob(`' > ./build/tetris_wasm_all.js
+	base64 ./build/tetris_wasm.wasm >> ./build/tetris_wasm_all.js
+	echo '`);'                      >> ./build/tetris_wasm_all.js
+	cat tetris_wasm_ui.js           >> ./build/tetris_wasm_all.js
+	sed -e '/SCRIPT/ {r ./build/tetris_wasm_all.js' -e 'd}' tetris_wasm_ui.html > index.html
 
 build/tetris.ino: $(SRC) $(HDR) $(SRC_INO)
 	mkdir -p build

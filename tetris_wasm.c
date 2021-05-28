@@ -6,7 +6,6 @@
 
 game tetris;
 
-
 // game_board (w * h), next_board (T * T),
 // score (1), shapes (1), rows (1), game_over_flag (1), draw_flag (1)
 // input_msg (1), millis_now (1)
