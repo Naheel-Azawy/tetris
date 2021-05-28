@@ -294,7 +294,10 @@ int main(int argc, char **argv) {
   pthread_t t;
   pthread_create(&t, NULL, kbd_listener, &g);
 
-  while (g.running) game_loop(&g);
+  while (g.running) {
+    game_loop(&g);
+    delay(5);
+  }
 
   pthread_join(t, NULL);
   if (ui.mouse) {

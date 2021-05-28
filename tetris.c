@@ -177,7 +177,6 @@ void next(game *g) {
 }
 
 void game_init(game *g) {
-  g->sleep     = 5;
   g->board_sum = 0;
   g->shapes    = 0;
   g->rows      = 0;
@@ -185,6 +184,7 @@ void game_init(game *g) {
   g->time_now  = millis();
   g->running   = true;
   g->paused    = false;
+  g->bottom    = false;
 
   zero(g->board, g->h + T);
   rand_seed();
@@ -210,12 +210,7 @@ int move_shape(game *g, int dir) {
     break;
 
   case BOTTOM:
-    while (move_shape(g, DOWN) == OK) {
-      if (!g->light) {
-        delay(g->sleep);
-        draw(g);
-      }
-    }
+    g->bottom = true;
     return OK;
 
   case ROTATE1:
@@ -298,6 +293,12 @@ void game_loop(game *g) {
 
     g->msg = NONE;
 
+  } else if (g->bottom) {
+    if (move_shape(g, DOWN) == OK) {
+      draw(g);
+    } else {
+      g->bottom = false;
+    }
   } else if (!g->paused) {
     // from emacs tetris.el
     // x = 0:1000; y = (20 ./ (50 + x)) * 1000; plot(x, y);
@@ -338,9 +339,5 @@ void game_loop(game *g) {
       draw(g);
     }
 
-  }
-
-  if (!g->light) {
-    delay(g->sleep);
   }
 }

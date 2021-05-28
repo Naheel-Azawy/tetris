@@ -65,13 +65,12 @@ typedef struct {
   int   curr_y;              // current shape y position
   int   board_sum;           // used for collision detection
   ul    time_now;            // timer
-  int   sleep;               // delay time (ms)
   int   period;              // current level delay period (ms)
   int   status;              // current move status
   bool  running;             // game is running
   bool  paused;              // game is paused
   int   msg;                 // messages to be run in the loop
-  bool  light;               // skips few steps if true
+  bool  bottom;              // jumping to the bottom
 } game;
 
 // game interface
@@ -82,7 +81,6 @@ void game_loop(game *g);
 int  rand_int();
 void rand_seed();
 ul   millis();
-void delay(ul msec);
 
 // drawing utils
 void draw(game *g);

@@ -101,7 +101,6 @@ void setup() {
   btn_b.onPressedFor(BTN_LONG_DURATION, on_btn_b_2);
 
   dir = LEFT;
-  tetris.light = true;
   tetris.w = 8;
   tetris.h = 16;
   //tetris.h = mx.getColumnCount();

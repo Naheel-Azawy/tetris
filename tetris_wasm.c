@@ -68,7 +68,6 @@ void draw_game_over(game *g) {
 void setup(int w, int h, int *d) {
   data_len = get_data_len(w, h);
   data = d;
-  tetris.light = true;
   tetris.w = w;
   tetris.h = h;
   game_init(&tetris);
