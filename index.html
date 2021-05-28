@@ -1,0 +1,77 @@
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Tetris</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <style>
+         body, button, select, input, a {
+             color:       white;
+             font-family: monospace;
+         }
+
+         body, button, select, input {
+             background-color: #000000;
+         }
+
+         button {
+             width: 100%;
+             width:  7ex;
+             height: 7ex;
+         }
+
+         #board td, #board-next td {
+             /*border: 1px solid white;*/
+             width:  4vmin;
+             height: 4vmin;
+         }
+
+         #board, #board-next {
+             border-collapse: collapse;
+             border-bottom:   2px solid white;
+             border-left:     2px solid white;
+             border-right:    2px solid white;
+         }
+
+         #board-next {
+             border-top: 2px solid white;
+         }
+        </style>
+    </head>
+    <body>
+
+        <div id="content" style="max-width: 500px; margin: auto">
+            <button onclick="data[msg] = PAUSE" style="float: right">||</button>
+            <br><br>
+
+            <table style="margin: auto"><tr>
+                <td><table id="board"></table></td>
+                <td>
+                    Next: <br>
+                    <table id="board-next"></table>
+                    <br>
+                    <table>
+                        <tr> <td>Shapes:</td> <td id="shapes"></td> </tr>
+                        <tr> <td>Rows:</td>   <td id="rows"></td>   </tr>
+                        <tr> <td>Score:</td>  <td id="score"></td>  </tr>
+                    </table>
+                </td>
+            </tr></table>
+
+            <br>
+            <table style="width: 80%; margin: auto">
+                <tr>
+                    <td><button onclick="data[msg] = LEFT"   >&lt</button></td>
+                    <td><button onclick="data[msg] = DOWN"   >D</button></td>
+                    <td><button onclick="data[msg] = BOTTOM" >B</button></td>
+                    <td><button onclick="data[msg] = ROTATE1">R</button></td>
+                    <td><button onclick="data[msg] = RIGHT"  >&gt</button></td>
+                </tr>
+            </table>
+        </div>
+
+        <div id="game-over"></div>
+
+        <script src="tetris_wasm_ui.js"></script>
+    </body>
+</html>
