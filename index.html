@@ -2,27 +2,29 @@
     <head>
         <meta charset="utf-8" />
         <title>Tetris</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 
         <style>
+         body {
+             touch-action: none;
+             user-select:  none;
+         }
+
          body, button, select, input, a {
              color:       white;
              font-family: monospace;
          }
 
          body, button, select, input {
-             background-color: #000000;
+             background-color: black;
          }
 
          button {
-             width: 100%;
              width:  50px;
              height: 50px;
          }
 
          #board td, #board-next td {
-             /*border: 1px solid white;*/
              width:  25px;
              height: 25px;
          }
@@ -39,7 +41,7 @@
          }
 
          #game-over {
-             width: 100%;
+             width:      100%;
              text-align: center;
          }
         </style>
@@ -68,17 +70,17 @@
             <br>
             <table style="width: 80%; margin: auto">
                 <tr>
-                    <td><button onclick="data[msg] = LEFT">&lt</button></td>
+                    <td><button id="btn-left">&lt</button></td>
                     <td></td>
-                    <td><button onclick="data[msg] = BOTTOM">B</button></td>
+                    <td><button onmousedown="data[msg] = BOTTOM">B</button></td>
                     <td></td>
-                    <td><button onclick="data[msg] = RIGHT">&gt</button></td>
+                    <td><button id="btn-right">&gt</button></td>
                 </tr>
                 <tr>
                     <td></td>
-                    <td><button onclick="data[msg] = DOWN">D</button></td>
+                    <td><button onmousedown="data[msg] = DOWN">D</button></td>
                     <td></td>
-                    <td><button onclick="data[msg] = ROTATE1">R</button></td>
+                    <td><button onmousedown="data[msg] = ROTATE1">R</button></td>
                     <td></td>
                 </tr>
             </table>
@@ -189,12 +191,16 @@ const W       = 10;
 const H       = 20;
 const T       = 4;
 const DELAY   = 10;
+const NAV_DEL = 100;
 
 let w;
 let h;
 let data;
 let data_len;
 let score, rows, shapes, gameover, drawf, msg, now;
+
+let btn_left_clicked  = false;
+let btn_right_clicked = false;
 
 async function delay(time) {
     return new Promise((resolve) => setTimeout(resolve, time));
@@ -226,7 +232,14 @@ async function run_game() {
     setup();
 
     for (;;) {
+        if (btn_left_clicked) {
+            data[msg] = LEFT;
+        } else if (btn_right_clicked) {
+            data[msg] = RIGHT;
+        }
+
         loop();
+
         if (data[msg] != NONE) {
             data[msg] = NONE;
         }
@@ -292,6 +305,18 @@ async function main() {
         case "p":          data[msg] = PAUSE;   break;
         }
     });
+
+    const btn_left  = document.getElementById("btn-left");
+    const btn_right = document.getElementById("btn-right");
+
+    btn_left.onmousedown   = () => data[msg] = LEFT;
+    btn_right.onmousedown  = () => data[msg] = RIGHT;
+
+    let touch_timer;
+    btn_left.ontouchstart  = () => touch_timer = setTimeout(() => btn_left_clicked  = true, NAV_DEL);
+    btn_right.ontouchstart = () => touch_timer = setTimeout(() => btn_right_clicked = true, NAV_DEL);
+    btn_left.ontouchend    = () => { btn_left_clicked  = false; clearTimeout(touch_timer); };
+    btn_right.ontouchend   = () => { btn_right_clicked = false; clearTimeout(touch_timer); };
 
     let table, tr, td;
 

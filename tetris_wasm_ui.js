@@ -19,12 +19,16 @@ const W       = 10;
 const H       = 20;
 const T       = 4;
 const DELAY   = 10;
+const NAV_DEL = 100;
 
 let w;
 let h;
 let data;
 let data_len;
 let score, rows, shapes, gameover, drawf, msg, now;
+
+let btn_left_clicked  = false;
+let btn_right_clicked = false;
 
 async function delay(time) {
     return new Promise((resolve) => setTimeout(resolve, time));
@@ -56,7 +60,14 @@ async function run_game() {
     setup();
 
     for (;;) {
+        if (btn_left_clicked) {
+            data[msg] = LEFT;
+        } else if (btn_right_clicked) {
+            data[msg] = RIGHT;
+        }
+
         loop();
+
         if (data[msg] != NONE) {
             data[msg] = NONE;
         }
@@ -122,6 +133,18 @@ async function main() {
         case "p":          data[msg] = PAUSE;   break;
         }
     });
+
+    const btn_left  = document.getElementById("btn-left");
+    const btn_right = document.getElementById("btn-right");
+
+    btn_left.onmousedown   = () => data[msg] = LEFT;
+    btn_right.onmousedown  = () => data[msg] = RIGHT;
+
+    let touch_timer;
+    btn_left.ontouchstart  = () => touch_timer = setTimeout(() => btn_left_clicked  = true, NAV_DEL);
+    btn_right.ontouchstart = () => touch_timer = setTimeout(() => btn_right_clicked = true, NAV_DEL);
+    btn_left.ontouchend    = () => { btn_left_clicked  = false; clearTimeout(touch_timer); };
+    btn_right.ontouchend   = () => { btn_right_clicked = false; clearTimeout(touch_timer); };
 
     let table, tr, td;
 
