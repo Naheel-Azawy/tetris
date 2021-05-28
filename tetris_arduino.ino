@@ -73,8 +73,8 @@ void draw_game_over(game *g) {
   char buf[16];
   itoa(g->score, buf, 10);
   scrollText(buf);
-  mx.clear();
   delay(3000);
+  mx.clear();
 }
 
 void on_btn_a() {
@@ -82,7 +82,7 @@ void on_btn_a() {
 }
 
 void on_btn_a_2() {
-  tetris.msg = DOWN;
+  tetris.msg = BOTTOM2;
 }
 
 void on_btn_b() {

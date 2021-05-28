@@ -16,6 +16,7 @@
 
 // move directions and messages
 #define BOTTOM  4
+#define BOTTOM2 10
 #define DOWN    5
 #define RIGHT   6
 #define LEFT    7

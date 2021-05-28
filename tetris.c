@@ -213,6 +213,10 @@ int move_shape(game *g, int dir) {
     g->bottom = true;
     return OK;
 
+  case BOTTOM2:
+    while (move_shape(g, DOWN) == OK);
+    return OK;
+
   case ROTATE1:
   case ROTATE2:
     rotate(g->current, 1, dir == ROTATE1 ? RIGHT : LEFT);
@@ -281,6 +285,7 @@ void game_loop(game *g) {
       break;
 
     case BOTTOM:
+    case BOTTOM2:
     case DOWN:
     case LEFT:
     case RIGHT:
