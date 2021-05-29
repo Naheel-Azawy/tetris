@@ -29,6 +29,7 @@ let score, rows, shapes, gameover, drawf, msg, now;
 
 let btn_left_clicked  = false;
 let btn_right_clicked = false;
+let btn_reset         = false;
 
 async function delay(time) {
     return new Promise((resolve) => setTimeout(resolve, time));
@@ -60,7 +61,10 @@ async function run_game() {
     setup();
 
     for (;;) {
-        if (btn_left_clicked) {
+        if (btn_reset) {
+            btn_reset = false;
+            break;
+        } else if (btn_left_clicked) {
             data[msg] = LEFT;
         } else if (btn_right_clicked) {
             data[msg] = RIGHT;

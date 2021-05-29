@@ -70,8 +70,15 @@
     <body>
 
         <div id="content" style="max-width: 500px; margin: auto">
-            <button onclick="data[msg] = PAUSE" style="float:right">||</button>
-            <br><br>
+            <table style="float:right">
+                <tr><td>
+                    <button onclick="data[msg] = PAUSE">||</button>
+                </td></tr>
+                <tr><td><br></td></tr>
+                <tr><td>
+                    <button onclick="btn_reset = true">S</button>
+                </td></tr>
+            </table>
 
             <table style="margin: auto"><tr>
                 <td><table id="board"></table></td>
