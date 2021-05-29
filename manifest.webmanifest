@@ -1,0 +1,15 @@
+{
+  "background_color": "black",
+  "description": "Yet another tetris, by Naheel",
+  "display": "fullscreen",
+  "icons": [
+    {
+      "src": "icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "name": "Tetris",
+  "short_name": "Tetris",
+  "start_url": "index.html"
+}

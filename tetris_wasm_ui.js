@@ -121,6 +121,15 @@ function set_cell(i, j, val, next) {
 }
 
 async function main() {
+    if ("serviceWorker" in navigator) {
+        try {
+            await navigator.serviceWorker.register("sw.js");
+            console.log("Worker registered");
+        } catch (e) {
+            console.log("Worker was not registered");
+        }
+    }
+
     window.onbeforeunload = () => "Are you sure you want to leave?";
 
     document.addEventListener("keydown", event => {
