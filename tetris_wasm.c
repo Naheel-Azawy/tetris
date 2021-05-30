@@ -1,8 +1,7 @@
 #include "tetris.h"
 
 #include <emscripten.h>
-#include <stdlib.h>   // rand
-#include <errno.h>    // for delay
+#include <stdlib.h> // rand
 
 game tetris;
 
@@ -18,9 +17,6 @@ int get_data_len(int w, int h) {
 
 ul millis() {
   return data[data_len - 1];
-}
-
-void delay(ul msec) {
 }
 
 int rand_int() {
