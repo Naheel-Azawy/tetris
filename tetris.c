@@ -195,6 +195,7 @@ void game_init(game *g) {
 int move_shape(game *g, int dir) {
   int new_x = g->curr_x;
   int new_y = g->curr_y;
+  int w;
 
   switch (dir) {
   case DOWN:
@@ -220,7 +221,7 @@ int move_shape(game *g, int dir) {
   case ROTATE1:
   case ROTATE2:
     rotate(g->current, 1, dir == ROTATE1 ? RIGHT : LEFT);
-    int w = S_WIDTH(g->current);
+    w = S_WIDTH(g->current);
     if ((new_x + w) > g->w) {
       new_x = g->w - w;
     }
