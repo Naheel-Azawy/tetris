@@ -1,7 +1,7 @@
 {
   "background_color": "black",
   "description": "Yet another tetris, by Naheel",
-  "display": "fullscreen",
+  "display": "standalone",
   "icons": [
     {
       "src": "icon.png",
