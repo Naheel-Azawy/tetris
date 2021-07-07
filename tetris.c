@@ -241,11 +241,11 @@ int move_shape(game *g, int dir) {
     return ADD;
   }
 
-  copy(g->board, g->boardtmp, g->h + T);
+  copy(g->board, g->board_dr, g->h + T);
 
-  int sum_expected = sum(g->boardtmp, g->w, g->h + T) + sum(g->current + 1, T, T);
-  put_shape(g, g->current, g->boardtmp, new_x, new_y);
-  int sum_res = sum(g->boardtmp, g->w, g->h + T);
+  int sum_expected = sum(g->board_dr, g->w, g->h + T) + sum(g->current + 1, T, T);
+  put_shape(g, g->current, g->board_dr, new_x, new_y);
+  int sum_res = sum(g->board_dr, g->w, g->h + T);
 
   // collision
   if (sum_expected != sum_res) {
@@ -254,8 +254,8 @@ int move_shape(game *g, int dir) {
     } else if (dir == ROTATE2) {
       rotate(g->current, 1, RIGHT);
     }
-    copy(g->board, g->boardtmp, g->h + T);
-    put_shape(g, g->current, g->boardtmp, g->curr_x, g->curr_y);
+    copy(g->board, g->board_dr, g->h + T);
+    put_shape(g, g->current, g->board_dr, g->curr_x, g->curr_y);
     return ADD;
   }
 

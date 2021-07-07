@@ -85,7 +85,7 @@ void draw(game *g) {
   for (int j = T; j < g->h + T; ++j) {
     put(ui->vline);
     for (int i = 0; i < g->w; ++i) {
-      if (CELL(g->boardtmp, i, j) != 0) {
+      if (CELL(g->board_dr, i, j) != 0) {
         put(ui->block);
       } else if (j == T - 1) {
         put(" .");

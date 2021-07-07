@@ -63,7 +63,7 @@ void draw(game *g) {
   col_count = 0;
   for (int j = T; j < g->h + T; ++j) {
     check_btns();
-    mx.setColumn(mx_cols - 8 - col_count++ - 1, g->boardtmp[j]);
+    mx.setColumn(mx_cols - 8 - col_count++ - 1, g->board_dr[j]);
   }
 }
 

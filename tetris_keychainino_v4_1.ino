@@ -72,7 +72,7 @@ void draw(game *g) {
   for (int j = T; j < g->h + T; ++j) {
     check_btns();
     for (int i = 0; i < g->w; ++i) {
-      KC.pixel(i, j - T, CELL(g->boardtmp, i, j));
+      KC.pixel(i, j - T, CELL(g->board_dr, i, j));
     }
   }
   KC.display();

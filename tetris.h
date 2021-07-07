@@ -56,7 +56,7 @@ typedef struct {
   int   w;                   // width
   int   h;                   // height
   u16   board[H_MAX + T];    // main board matrix
-  u16   boardtmp[H_MAX + T]; // drawing matrix
+  u16   board_dr[H_MAX + T]; // drawing matrix
   u16   current[T + 1];      // current shape
   u16   next[T + 1];         // next shape
   int   shapes;              // shapes count

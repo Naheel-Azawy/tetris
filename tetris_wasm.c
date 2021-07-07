@@ -35,7 +35,7 @@ void draw(game *g) {
   for (int j = T; j < g->h + T; ++j) {
     for (int i = 0; i < g->w; ++i) {
       read_keyboard(g);
-      data[g->w * (j - T) + i] = CELL(g->boardtmp, i, j);
+      data[g->w * (j - T) + i] = CELL(g->board_dr, i, j);
     }
   }
 
