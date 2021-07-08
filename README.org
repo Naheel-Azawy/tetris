@@ -4,25 +4,68 @@
 ** Why?
    I play tetris since childhood. Such a shame it took me all that long to write my own. I also wanted to see how would I implement it. I haven't gone over any other implementation before so this probably won't be the most optimum tetris out there. The plan was to compare this to other implementations once it's done but I got lazy. Feel free to review and/or to send pull requests.
 
-** Scoring/speed
-   Rules are taken from emacs's ~tetris.el~. Which I guess is originally adopted from xtetris.
+   This implementation tries to be as portable as possible. ~tetris.h~ and ~tetris.c~ define the logic of the game. The rest of the files are different ways to represent the game with different interfaces as show below.
 
-** In the box
-   - Terminal version (~make tui && sudo make install~)
-   - Arduino version with MD_MAX72xx (~make ino~ to generate ~./build/tetris.ino~)
-   - Web version (~make web~ to generate ~index.html~)
+** Terminal
+   [[./imgs/trm.png]]
 
-** Terminal version
    ANSI support is enabled by default. For ASCII, pass -a option. For mouse support, pass -m option.
+   Left and right arrow keys move the current shape, up rotates it, down moves it down, and the space bar drops it down.
+   Letter "p" pauses the game and "q" quits it.
 
-** Arduino version
-   Once you get your ~./build/tetris.ino~, you can use this in Arduino IDE, ~arduino-cli~, or ~pio~.
+   #+begin_src shell-script
+     make && sudo make install
+   #+end_src
+
+** Arduino
+   [[./imgs/ino.jpg]]
+
+   An MD_MAX72xx LED matrix is used in this setup.
    Note that the game is controlled using only two buttons. This is mainly because I found only two in the drawer next to my desk.
    Each button has two functions. One is used to rotate the shape and to move down on long press.
    The other button moves the shape left or right. On long press, the direction of the movement is flipped.
+   This configuration might change in the future. But that's how it is right now.
 
-** Web version
+   #+begin_src shell-script
+     make ino
+   #+end_src
+
+   This will generate ~build/tetris_arduino.ino~ which can be used in Arduino IDE, ~arduino-cli~, or ~pio~.
+
+** KeyChainino
+   [[./imgs/kc144.jpg]]
+
+   Similar to the Arduino interface, this interface is built for the [[https://www.keychainino.com/product/keychainino-144/][KeyChainino 144]].
+   Button A moves the current shape to the left and B moves it to the right. Pressing both buttons at the same time rotates the shape.
+
+   #+begin_src shell-script
+     make kc144
+   #+end_src
+
+   This will generate ~build/tetris_keychainino_v4_1.ino~.
+   Install the [[https://github.com/alessandromatera/KeyChainino/blob/master/Sketch/KeyChainino_v4_144_LEDs/Library/KeyChainino.zip?raw=true][KeyChainino library]] and follow [[https://www.keychainino.com/how-to-program-keychainino-v3-via-isp/][this guide]] to program your KeyChainino.
+
+** Web
+   [[./imgs/web.png]]
+
    Web Assembly supported browser is needed for the game logic. The UI is written in pure html, css, and js (es6).
+   The interface is mobile friendly and the keyboard bindings are the same as in the terminal interface.
+   This interface provides the game as a [[https://en.wikipedia.org/wiki/Progressive_web_application][PWA]].
+   Make sure to install [[https://emscripten.org/docs/getting_started/downloads.html][Emscripten SDK]] before building.
+
+   #+begin_src shell-script
+     # source the emsdk env
+     . <path_to_emsdk>/emsdk_env.sh
+
+     # build the web program
+     make web
+
+     # copy the files to some kind of a web server, below is an example
+     cp build/index.html sw.js manifest.webmanifest icon.png /srv/http/
+   #+end_src
+
+** Scoring/speed
+   Rules are taken from emacs's ~tetris.el~. Which I guess is originally adopted from xtetris.
 
 ** License
    GPL-3

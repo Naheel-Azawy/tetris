@@ -8,6 +8,7 @@
 #include <pthread.h>  // for non-blocking input
 #include <termios.h>  // termios, TCSANOW, ECHO, ICANON
 #include <unistd.h>   // STDIN_FILENO
+#include <string.h>   // strlen
 
 typedef struct {
   bool  ascii;
@@ -165,8 +166,6 @@ void draw_game_over(game *g) {
   delay(3000);
 }
 
-#include <string.h>
-
 void *kbd_listener(void *arg) {
   game *g = (game*) arg;
   tui *ui = (tui *) g->helper;
@@ -260,7 +259,7 @@ void *kbd_listener(void *arg) {
 }
 
 int help() {
-  printf("usuage: tetris [-a] [-w WIDTH] [-h HEIGHT]\n");
+  printf("usuage: tetris [-a] [-m] [-w WIDTH] [-h HEIGHT]\n");
   return 1;
 }
 
